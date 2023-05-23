@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Shortener</title>
+  <!-- Add Bootstrap CSS link here -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+  <style>
+    /* Custom styles */
+    .copy-button {
+      cursor: pointer;
+    }
+
+    /* Toast styles */
+    .toast {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background-color: #333;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>URL Shortener</h1>
+    <h2>Result</h2>
+
+    <div class="mt-4">
+      <p><strong>Original URL:</strong> {{ original_url }}</p>
+      <p><strong>Short URL:</strong> {{ short_url }}</p>
+
+      <!-- Copy URL button -->
+      <button id="copy-button" class="btn btn-primary copy-button">
+        Copy URL
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+          <path d="M10 0h2a2 2 0 0 1 2 2v1h1a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1h1V2a2 2 0 0 1 2-2h4zm2 3h2a1 1 0 0 1 1 1v1H2V4a1 1 0 0 1 1-1h2V2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1zm0 2H2v10h12V5zm-4 3H4v6h4V8z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Add Bootstrap JS and jQuery script links here -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Copy URL button functionality
+    $(document).ready(function() {
+      $("#copy-button").click(function() {
+        // Copy the short URL to the clipboard
+        var shortUrlElement = document.createElement("textarea");
+        shortUrlElement.value = "{{ short_url }}";
+        document.body.appendChild(shortUrlElement);
+        shortUrlElement.select();
+        document.execCommand("copy");
+        document.body.removeChild(shortUrlElement);
+
+        // Show the "Copied to Clipboard" toast
+        var toastElement = document.createElement("div");
+        toastElement.classList.add("toast");
+        toastElement.textContent = "Copied to Clipboard";
+        document.body.appendChild(toastElement);
+
+        // Fade out the toast after 2 seconds
+        setTimeout(function() {
+          toastElement.classList.add("show");
+          setTimeout(function() {
+            toastElement.classList.remove("show");
+            document.body.removeChild(toastElement);
+          }, 2000);
+        }, 100);
+
+        // Prevent the button from triggering form submission
+        return false;
+      });
+    });
+  </script>
+</body>
+</html>

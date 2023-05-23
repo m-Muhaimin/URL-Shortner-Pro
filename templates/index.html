@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-4">URL Shortener</h1>
+
+        <form action="/shorten" method="POST" class="max-w-lg mx-auto">
+            <div class="flex items-center">
+                <input type="url" name="url" placeholder="Enter URL" required class="flex-grow rounded-l-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 px-4 py-2">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-r-md px-4 py-2">Shorten</button>
+            </div>
+        </form>
+
+        {% if original_url %}
+        <div class="bg-white p-4 mt-4 rounded-md">
+            <div class="flex items-center">
+                <span class="text-gray-600">Original URL:</span>
+                <a href="{{ original_url }}" target="_blank" class="text-blue-500 ml-2">{{ original_url }}</a>
+            </div>
+            <div class="flex items-center mt-2">
+                <span class="text-gray-600">Short URL:</span>
+                <a href="{{ short_url }}" target="_blank" class="text-blue-500 ml-2">{{ short_url }}</a>
+                <button id="copyBtn" class="ml-2 text-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                        <path d="M17 3h-9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-1 9H8"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if message %}
+        <div class="bg-red-200 text-red-700 p-4 mt-4 rounded-md">
+            {{ message }}
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var copyBtn = document.getElementById("copyBtn");
+            copyBtn.addEventListener("click", function() {
+                var shortUrl = document.getElementById("shortUrl");
+                shortUrl.select();
+                document.execCommand("copy");
+
+                // Show the "Copied to Clipboard" toast
+                var toastElement = document.createElement("div");
+                toastElement.classList.add("fixed", "top-4", "right-4", "bg-green-500", "text-white", "p-2", "rounded-md");
+                toastElement.textContent = "Copied to Clipboard";
+                document.body.appendChild(toastElement);
+
+                // Remove the toast after 2 seconds
+                setTimeout(function() {
+                    toastElement.remove();
+                }, 2000);
+            });
+        });
+    </script>
+
+</body>
+</html>
